@@ -1,0 +1,7 @@
+{
+  "name": "Fluxo_de_Caixa",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}
