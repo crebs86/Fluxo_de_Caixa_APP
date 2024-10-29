@@ -2,11 +2,7 @@
   <ion-page>
     <Layout>
       <template #main>
-        <ion-header>
-          <ion-toolbar color="yellow-light">
-            <ion-title>Fluxo</ion-title>
-          </ion-toolbar>
-        </ion-header>
+        <Header title="Fluxo" />
         <ion-content :fullscreen="true" color="ice">
           <ion-header collapse="condense">
             <ion-toolbar color="yellow-light">
@@ -38,7 +34,7 @@
               </ion-col>
             </ion-button>
 
-            <ion-button fill="clear">
+            <ion-button fill="clear" @click="goTo('/tabs/supplies')">
               <ion-col>
                 <ion-row style="display: block">
                   <ion-icon :src="user"></ion-icon>
@@ -71,6 +67,17 @@
               </ion-col>
             </ion-button>
 
+            <ion-button fill="clear" @click="goTo('/tabs/stores')">
+              <ion-col>
+                <ion-row style="display: block">
+                  <ion-icon :src="shop"></ion-icon>
+                </ion-row>
+                <ion-row class="ion-text-capitalize">
+                  <small>Lojas</small>
+                </ion-row>
+              </ion-col>
+            </ion-button>
+
           </div>
 
         </ion-content>
@@ -81,16 +88,18 @@
 
 <script setup>
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonIcon, IonRow, IonCol } from '@ionic/vue';
-import { useAuthStore } from '../store/useAuthStore';
 import Layout from '../components/Layout.vue';
+import Header from '../components/Header.vue';
 
 import hand_money from '../assets/icons/hand-money.svg';
 import user from '../assets/icons/user-circle.svg';
 import user_group from '../assets/icons/user-group.svg';
 import cart from '../assets/icons/cart-larger.svg';
 import money from '../assets/icons/money-bag.svg';
+import shop from '../assets/icons/shop.svg';
+import { goTo } from '../modules/utils';
 
-const auth = useAuthStore();
+
 </script>
 
 <style scoped>
@@ -100,13 +109,6 @@ ion-icon {
 
 ion-button {
   width: 100px;
-}
-
-ion-row>small {
-  text-align: center;
-  margin-left: auto;
-  margin-right: auto;
-  color: #e5a50a;
 }
 
 </style>

@@ -4,12 +4,13 @@ import { useAuthStore } from "../store/useAuthStore";
 
 function checkIfLogged() {
   const store = useAuthStore();
+  //console.log('checkIfLogged',store.getUser)
   if (!store.getUser) return "/tabs/login";
 }
 
 function checkIfNotLogged() {
-  const auth = useAuthStore();
-  if (auth.getUser) return "/";
+  const store = useAuthStore();
+  if (store.getUser) return "/";
 }
 
 const routes = [
@@ -43,6 +44,38 @@ const routes = [
       {
         path: "account",
         component: () => import("@/views/Account.vue"),
+      },
+
+      {
+        path: "stores",
+        component: () => import("@/views/Stores.vue"),
+        beforeEnter: [checkIfLogged],
+      },
+      {
+        path: "stores/new",
+        component: () => import("@/views/StoresNew.vue"),
+        beforeEnter: [checkIfLogged],
+      },
+      {
+        path: "stores/edit/:id",
+        component: () => import("@/views/StoresEdit.vue"),
+        beforeEnter: [checkIfLogged],
+      },
+
+      {
+        path: "supplies",
+        component: () => import("@/views/Supplies.vue"),
+        beforeEnter: [checkIfLogged],
+      },
+      {
+        path: "supplies/new",
+        component: () => import("@/views/StoresNew.vue"),
+        beforeEnter: [checkIfLogged],
+      },
+      {
+        path: "supplies/edit/:id",
+        component: () => import("@/views/StoresEdit.vue"),
+        beforeEnter: [checkIfLogged],
       },
     ],
   },

@@ -37,11 +37,11 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-amber-tint: #e8ae23;
 
   --ion-color-blue-light: #a4d7e8;
-	--ion-color-blue-light-rgb: 164,215,232;
-	--ion-color-blue-light-contrast: #000000;
-	--ion-color-blue-light-contrast-rgb: 0,0,0;
-	--ion-color-blue-light-shade: #90bdcc;
-	--ion-color-blue-light-tint: #addbea;
+  --ion-color-blue-light-rgb: 164, 215, 232;
+  --ion-color-blue-light-contrast: #000000;
+  --ion-color-blue-light-contrast-rgb: 0, 0, 0;
+  --ion-color-blue-light-shade: #90bdcc;
+  --ion-color-blue-light-tint: #addbea;
 }
 
 .ion-color-green-light {
@@ -90,12 +90,12 @@ http://ionicframework.com/docs/theming/ */
 }
 
 .ion-color-blue-light {
-	--ion-color-base: var(--ion-color-blue-light);
-	--ion-color-base-rgb: var(--ion-color-blue-light-rgb);
-	--ion-color-contrast: var(--ion-color-blue-light-contrast);
-	--ion-color-contrast-rgb: var(--ion-color-blue-light-contrast-rgb);
-	--ion-color-shade: var(--ion-color-blue-light-shade);
-	--ion-color-tint: var(--ion-color-blue-light-tint);
+  --ion-color-base: var(--ion-color-blue-light);
+  --ion-color-base-rgb: var(--ion-color-blue-light-rgb);
+  --ion-color-contrast: var(--ion-color-blue-light-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-blue-light-contrast-rgb);
+  --ion-color-shade: var(--ion-color-blue-light-shade);
+  --ion-color-tint: var(--ion-color-blue-light-tint);
 }
 
 .container {
@@ -103,6 +103,81 @@ http://ionicframework.com/docs/theming/ */
   margin: 3px;
 }
 
-.text-center{
+.text-center {
   text-align: center !important;
+}
+
+.float-left {
+  float: left !important;
+}
+
+.pl-4 {
+  padding-left: 10px;
+}
+
+.ml-4 {
+  margin-left: 10px;
+}
+
+.pt-4 {
+  padding-top: 10px !important;
+}
+
+.mt-4 {
+  margin-top: 10px !important;
+}
+
+.pt-1 {
+  padding-top: 2.5px;
+}
+
+.small-text-danger {
+  color: var(--ion-color-danger);
+  margin-left: 15px;
+}
+
+ion-row > small {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  color: #e5a50a;
+}
+
+ion-alert {
+  .alert-wrapper.sc-ion-alert-md {
+    background-color: var(--ion-color-ice) !important;
+  }
+
+  .alert-radio-icon.sc-ion-alert-md {
+    background-color: var(--ion-color-amber) !important;
+  }
+
+  .alert-radio-label.sc-ion-alert-md {
+    color: var(--ion-color-amber) !important;
+  }
+
+  [aria-checked="true"].sc-ion-alert-md .alert-radio-label.sc-ion-alert-md {
+    color: var(--ion-color-green-light) !important;
+  }
+
+  /*título*/
+  .alert-title.sc-ion-alert-md {
+    font-size: 25px;
+    font-weight: 600;
+    color: var(--ion-color-amber) !important;
+  }
+
+  [aria-checked="true"].sc-ion-alert-md .alert-radio-icon.sc-ion-alert-md {
+    border-color: var(--ion-color-green-light) !important;
+  }
+
+  .alert-radio-inner.sc-ion-alert-md {
+    background-color: var(--ion-color-green-light) !important;
+  }
+
+  .alert-button-inner.sc-ion-alert-md {
+    color: #00000080;
+    font-weight: bold;
+    font-size: larger;
+  }
 }

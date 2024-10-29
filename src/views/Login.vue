@@ -94,8 +94,11 @@ const setOpenLoading = (state) => {
 }
 
 onMounted(() => {
-  if (store.user !== '') {
-    router.push('/')
+  if (store.getUser?.data?.id) {
+    console.log('Usuário autenticado, redirecionando...')
+    router.push('/');
+  }else{
+    console.log('Login page...')
   }
 })
 
