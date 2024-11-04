@@ -131,6 +131,10 @@ http://ionicframework.com/docs/theming/ */
   padding-top: 2.5px;
 }
 
+.button-fab {
+  margin-top: -10px;
+}
+
 .small-text-danger {
   color: var(--ion-color-danger);
   margin-left: 15px;

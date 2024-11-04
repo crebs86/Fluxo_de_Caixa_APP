@@ -43,14 +43,14 @@ import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem,
 import { useAuthStore } from '../store/useAuthStore';
 import Layout from '../components/Layout.vue';
 import { logOut } from 'ionicons/icons';
-import axios from 'axios';
 import router from '../router';
+import api from '../api';
 
 const auth = useAuthStore();
 
 const userLogout = async () => {
   try {
-    await axios.get('/api/logout', auth.getHeaderConfig);
+    await api.get('/logout', auth.getHeaderConfig);
     auth.clearStoredData();
     router.push('/tabs/login')
   } catch (e) {
