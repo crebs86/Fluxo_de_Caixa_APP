@@ -85,8 +85,8 @@ const loading = utils();
 
 function loadSupplies() {
   supplies.value = {}
-  loading.setLoadStatus(true)
-  api.get('supplies/loadByStore/' + currentStore.value)
+  loading.status = true
+  api.get('suppliers/loadByStore/' + currentStore.value)
     .then((r) => {
       if (r.data?.length < 1) {
         message.value = 'Nenhum fornecedor cadastrado para esta loja.';
@@ -105,7 +105,7 @@ function loadSupplies() {
       color.value = 'danger'
       setOpen(true)
     })
-    .finally(loading.setLoadStatus(false))
+    .finally(() => { loading.status = false })
 }
 
 function newSupplier() {
@@ -113,25 +113,37 @@ function newSupplier() {
     color.value = 'danger'
     setOpen(true)
     message.value = 'Selecione uma loja para criar o fornecedor.';
-    //message.value = 'Você atingiu o número máximo de fornecedores para conta gratuita.';
   } else {
-    //goTo('/tabs/stores/new')
-    console.log('ir para nreSupplies')
-
+    loading.status = true
+    api('/suppliers/can-create-new-supplier/' + currentStore.value)
+      .then(() => {
+        goTo({ name: 'supplier-new', params: { store: currentStore.value } })
+      })
+      .catch((e) => {
+        message.value = e.response?.data?.message
+        setOpen(true)
+      })
+      .finally(() => {
+        loading.status = false
+      })
   }
 }
 
 onMounted(() => {
+  loading.status = true
   api.get('/stores')
     .then(r => {
       stores.value = r.data
     })
     .catch((e) => {
       if (e.response.status === 401) {
-        message.value = e.response.data.message
+        message.value = e.response?.data?.message
         setOpen(true)
       }
       color.value = 'danger'
+    })
+    .finally(() => {
+      loading.status = false
     })
 })
 
@@ -144,5 +156,9 @@ ion-fab {
 
 ion-list {
   background-color: var(--ion-color-ice-tint);
+}
+
+.button-fab {
+  margin-top: -14px;
 }
 </style>

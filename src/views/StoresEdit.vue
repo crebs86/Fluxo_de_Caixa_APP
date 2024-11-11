@@ -105,6 +105,9 @@ import api from '../api';
 import { useRoute } from 'vue-router';
 import { date } from '../modules/utils';
 import { close, pencil } from 'ionicons/icons';
+import { utils } from '../store/utils';
+
+const loading = utils();
 
 const storeModel = ref({
   name: '',
@@ -148,8 +151,9 @@ function updateStore() {
       , (length({ value: storeModel.value.contact1, min: 13, max: 14, field: 'Contato 1' }))
       , (!storeModel.value.contact2 || length({ value: storeModel.value.contact2, min: 13, max: 14, field: 'Contato 2' }))
       , (!storeModel.value.address || length({ value: storeModel.value.address, min: 5, max: 255, field: 'Endereço' }))
-      , length({ value: storeModel.value.docs, min: 14, max: 18, field: 'CPF/CNPJ' })
+      , length({ value: storeModel.value.docs ? storeModel.value.docs.match(/\d/g).join("") : '', min: 11, max: 14, field: 'CPF/CNPJ' })
     ) {
+      loading.status = true
       api.post('/stores/store/update/' + route.params?.id, storeModel.value)
         .then((r) => {
           loadStore(r)
@@ -157,6 +161,7 @@ function updateStore() {
         })
         .catch((e) => {
           if (e?.response?.status === 422) {
+            storeModel.value.error_message = e.response?.data?.message
             storeModel.value.errors = e?.response?.data.errors
             setOpen(true)
           } else if (e?.response?.status === 419) {
@@ -165,6 +170,9 @@ function updateStore() {
           } else {
             storeModel.value.error_message = 'Não foi possível concluir a ação. Verifique os erros do formulário.'
           }
+        })
+        .finally(() => {
+          loading.status = false
         })
     }
   } catch (error) {
@@ -184,13 +192,16 @@ function loadStore(r) {
 }
 
 onMounted(() => {
-
+  loading.status = true
   api.get('/stores/store/show/' + route.params?.id)
     .then((r) => {
       loadStore(r)
     })
     .catch((e) => {
       console.log(e?.response)
+    })
+    .finally(() => {
+      loading.status = false
     })
 })
 

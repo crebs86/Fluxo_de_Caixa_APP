@@ -72,7 +72,11 @@ const userAuth = async () => {
     });
   } catch (e) {
     errorLogin();
-    store.setErrors(e.response.data.errors);
+    if (e.response?.data?.errors) {
+      store.setErrors(e.response?.data?.errors);
+    } else if (typeof e === 'string') {
+      store.setErrors(e);
+    }
   }
 }
 
@@ -97,7 +101,7 @@ onMounted(() => {
   if (store.getUser?.data?.id) {
     console.log('Usuário autenticado, redirecionando...')
     router.push('/');
-  }else{
+  } else {
     console.log('Login page...')
   }
 })

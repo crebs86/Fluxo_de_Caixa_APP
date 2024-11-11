@@ -34,7 +34,7 @@
               </ion-col>
             </ion-button>
 
-            <ion-button fill="clear" @click="goTo('/tabs/supplies')">
+            <ion-button fill="clear" @click="goTo({ name: 'suppliers' })">
               <ion-col>
                 <ion-row style="display: block">
                   <ion-icon :src="user"></ion-icon>
@@ -67,7 +67,7 @@
               </ion-col>
             </ion-button>
 
-            <ion-button fill="clear" @click="goTo('/tabs/stores')">
+            <ion-button fill="clear" @click="goTo({ name: 'stores' })">
               <ion-col>
                 <ion-row style="display: block">
                   <ion-icon :src="shop"></ion-icon>
@@ -110,5 +110,4 @@ ion-icon {
 ion-button {
   width: 100px;
 }
-
 </style>

@@ -84,15 +84,18 @@ import { phoneMask, docsMask } from '../modules/mask';
 import { ref } from 'vue';
 import { email, length } from '../modules/validation';
 import api from '../api';
-import router from '../router';
+import { goTo } from '../modules/utils';
+import { utils } from '../store/utils';
+
+const loading = utils()
 
 const storeModel = ref({
-  name: 'Cleber Martins',
-  email: 'cleber@crebs.dev',
-  docs: '117.367.077-79',
-  contact1: '(27) 99829-8541',
-  contact2: '(27) 99236-1489',
-  address: 'Rua da Jaca',
+  name: '',
+  email: '',
+  docs: '',
+  contact1: '',
+  contact2: '',
+  address: '',
   error_message: '',
   errors: {}
 })
@@ -123,18 +126,26 @@ function crateStore() {
       , (length({ value: storeModel.value.contact1, min: 13, max: 14, field: 'Contato 1' }))
       , (!storeModel.value.contact2 || length({ value: storeModel.value.contact2, min: 13, max: 14, field: 'Contato 2' }))
       , (!storeModel.value.address || length({ value: storeModel.value.address, min: 5, max: 255, field: 'Endereço' }))
-      , length({ value: storeModel.value.docs, min: 14, max: 18, field: 'CPF/CNPJ' })
+      , length({ value: storeModel.value.docs ? storeModel.value.docs.match(/\d/g).join("") : '', min: 11, max: 14, field: 'CPF/CNPJ' })
     ) {
+      loading.status = true
       api.post('/stores/store', storeModel.value)
         .then((r) => {
-          router.push('/tabs/stores/edit/' + r.data.id)
+          goTo({ name: 'stores-edit', params: { id: r.data.id } })
         })
         .catch((e) => {
           if (e?.response?.status === 422) {
             storeModel.value.errors = e?.response?.data.errors
-            setOpen(true)
             storeModel.value.error_message = 'Não foi possível concluir a ação. Verifique os erros abaixo.'
+          } else if (e?.response?.status === 401) {
+            storeModel.value.error_message = e?.response?.data.message
+          } else {
+            storeModel.value.error_message = 'Ocorreu um erro ao processar solicitação.'
           }
+          setOpen(true)
+        })
+        .finally(() => {
+          loading.status = false
         })
     }
   } catch (error) {

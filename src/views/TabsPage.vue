@@ -22,6 +22,10 @@
           <ion-icon aria-hidden="true" :icon="personSharp" />
           <ion-label>Conta</ion-label>
         </ion-tab-button>
+        <ion-tab-button tab="tab4" href="/tabs/dev" v-if="env === 'dev'">
+          <ion-icon aria-hidden="true" :icon="settings" />
+          <ion-label>DEV</ion-label>
+        </ion-tab-button>
 
       </ion-tab-bar>
     </ion-tabs>
@@ -30,9 +34,11 @@
 
 <script setup>
 import { IonTabBar, IonTabButton, IonTabs, IonLabel, IonIcon, IonPage, IonRouterOutlet } from '@ionic/vue';
-import { barChart, home, personSharp } from 'ionicons/icons';
+import { barChart, home, personSharp, settings } from 'ionicons/icons';
 import sign_in from '../assets/icons/sign-in-alt.svg'
 import { useAuthStore } from '../store/useAuthStore';
 
 const auth = useAuthStore();
+
+const env = import.meta.env.VITE_ENV;
 </script>
