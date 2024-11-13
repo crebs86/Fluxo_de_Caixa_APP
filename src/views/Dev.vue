@@ -22,6 +22,8 @@
             <ion-button @click="load('auth')">Testar rota protegida</ion-button>
             <ion-button @click="load('guest')">Testar rota guest</ion-button>
             <ion-button @click="loadURL()">Load URL</ion-button>
+            <ion-button @click="loadStorage(true)">Load Storage</ion-button>
+            <ion-button @click="loadStorage()">Load User Store</ion-button>
             <ion-button @click="data = {}">Limpar</ion-button>
             <hr>
             {{ data }}
@@ -51,13 +53,21 @@ function loadURL() {
 }
 
 function load(type) {
-  api.get(type === 'auth' ? '/user' : '/test')
+  api.get(type === 'auth' ? '/api/user' : '/api/test')
     .then((r) => {
       data.value = r
     })
     .catch((e) => {
       data.value = e
     })
+}
+
+function loadStorage(type = false) {
+  if (type) {
+    data.value = JSON.parse(localStorage.getItem('user'))
+  } else {
+    data.value = auth.user
+  }
 }
 
 </script>

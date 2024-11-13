@@ -7,8 +7,14 @@ const pinia = createPinia();
 import router from "./router";
 
 import axios from "axios";
-axios.defaults.baseURL = "http://fluxo-api.local.arpa";
-//axios.defaults.baseURL = "http://localhost:8000";
+
+const url =
+  import.meta.env.VITE_ENV === "dev"
+    ? import.meta.env.VITE_API_URL
+    : import.meta.env.VITE_API_URL_PROD;
+
+axios.defaults.baseURL = url;
+
 axios.defaults.withCredentials = true;
 axios.defaults.withXSRFToken = true;
 axios.defaults.headers.common["Accept"] = "application/json";

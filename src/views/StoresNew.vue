@@ -129,7 +129,7 @@ function crateStore() {
       , length({ value: storeModel.value.docs ? storeModel.value.docs.match(/\d/g).join("") : '', min: 11, max: 14, field: 'CPF/CNPJ' })
     ) {
       loading.status = true
-      api.post('/stores/store', storeModel.value)
+      api.post('/api/stores/store', storeModel.value)
         .then((r) => {
           goTo({ name: 'stores-edit', params: { id: r.data.id } })
         })

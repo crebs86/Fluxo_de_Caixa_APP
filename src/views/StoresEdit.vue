@@ -154,7 +154,7 @@ function updateStore() {
       , length({ value: storeModel.value.docs ? storeModel.value.docs.match(/\d/g).join("") : '', min: 11, max: 14, field: 'CPF/CNPJ' })
     ) {
       loading.status = true
-      api.post('/stores/store/update/' + route.params?.id, storeModel.value)
+      api.post('/api/stores/store/update/' + route.params?.id, storeModel.value)
         .then((r) => {
           loadStore(r)
           canEdit.value = false
@@ -193,7 +193,7 @@ function loadStore(r) {
 
 onMounted(() => {
   loading.status = true
-  api.get('/stores/store/show/' + route.params?.id)
+  api.get('/api/stores/store/show/' + route.params?.id)
     .then((r) => {
       loadStore(r)
     })

@@ -50,9 +50,9 @@ const auth = useAuthStore();
 
 const userLogout = async () => {
   try {
-    await api.get('/logout', auth.getHeaderConfig);
+    await api.get('/api/logout', auth.getHeaderConfig);
     auth.clearStoredData();
-    router.push('/tabs/login')
+    router.push({ name: 'login' })
   } catch (e) {
     console.log(e)
   }

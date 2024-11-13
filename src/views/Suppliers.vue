@@ -86,7 +86,7 @@ const loading = utils();
 function loadSupplies() {
   supplies.value = {}
   loading.status = true
-  api.get('suppliers/loadByStore/' + currentStore.value)
+  api.get('/api/suppliers/loadByStore/' + currentStore.value)
     .then((r) => {
       if (r.data?.length < 1) {
         message.value = 'Nenhum fornecedor cadastrado para esta loja.';
@@ -115,7 +115,7 @@ function newSupplier() {
     message.value = 'Selecione uma loja para criar o fornecedor.';
   } else {
     loading.status = true
-    api('/suppliers/can-create-new-supplier/' + currentStore.value)
+    api('/api/suppliers/can-create-new-supplier/' + currentStore.value)
       .then(() => {
         goTo({ name: 'supplier-new', params: { store: currentStore.value } })
       })
@@ -131,7 +131,7 @@ function newSupplier() {
 
 onMounted(() => {
   loading.status = true
-  api.get('/stores')
+  api.get('/api/stores')
     .then(r => {
       stores.value = r.data
     })

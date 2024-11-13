@@ -13,15 +13,15 @@
               <ion-input label-placement="floating" label="E-mail" fill="outline" placeholder="example@email.com"
                 v-model="data.user.email">
               </ion-input>
-              <ion-text v-if="store.errors?.email" color="danger">
-                <small v-for="(e, i) in store.errors?.email" :key="'e_err_' + i">{{ e }}</small>
+              <ion-text v-if="auth.errors?.email" color="danger">
+                <small v-for="(e, i) in auth.errors?.email" :key="'e_err_' + i">{{ e }}</small>
               </ion-text>
 
               <ion-input label-placement="floating" label="Senha" fill="outline" type="password"
                 v-model="data.user.password">
               </ion-input>
-              <ion-text v-if="store.errors?.password" color="danger">
-                <small v-for="(e, i) in store.errors?.password" :key="'p_err_' + i">{{ e }}</small>
+              <ion-text v-if="auth.errors?.password" color="danger">
+                <small v-for="(e, i) in auth.errors?.password" :key="'p_err_' + i">{{ e }}</small>
               </ion-text>
 
               <ion-button expand="full" color="amber" @click="userAuth">Entrar</ion-button>
@@ -46,8 +46,12 @@ import { useAuthStore } from '../store/useAuthStore';
 import { onMounted, reactive, ref } from 'vue';
 import axios from 'axios';
 import router from '../router';
+import api from '../api';
 
-const store = useAuthStore();
+const auth = useAuthStore();
+
+const token = ref('');
+const isLoggedIn = ref(false);
 
 const data = reactive({
   user: {
@@ -57,15 +61,16 @@ const data = reactive({
 });
 
 const userAuth = async () => {
-  store.clearErrors();
+  auth.clearErrors();
   setOpenLoading(true);
   try {
     await axios.get('/sanctum/csrf-cookie').then(async () => {
-      const response = await axios.post('api/login', data.user);
+      const response = await api.post('/api/login', data.user);
       if (response.data.success) {
-        store.storeUser(response.data.user);
+        auth.storeUser(response.data.user);
         setOpenLoading(false);
-        router.push('/tabs');
+        //router.push('/tabs');
+        window.location.href = '/'
       } else {
         console.log('erro no login');
       }/** */
@@ -73,9 +78,9 @@ const userAuth = async () => {
   } catch (e) {
     errorLogin();
     if (e.response?.data?.errors) {
-      store.setErrors(e.response?.data?.errors);
+      auth.setErrors(e.response?.data?.errors);
     } else if (typeof e === 'string') {
-      store.setErrors(e);
+      auth.setErrors(e);
     }
   }
 }
@@ -97,13 +102,37 @@ const setOpenLoading = (state) => {
   isOpenLoading.value = state;
 }
 
-onMounted(() => {
-  if (store.getUser?.data?.id) {
+async function checkToken() {
+  //console.log('checkToken')
+  await api.get('/api/check-token')
+    .then((r) => {
+      isLoggedIn.value = r.data
+    })
+    .catch(() => {
+      isLoggedIn.value = false
+    })
+    .finally(() => {
+
+    })
+}
+
+onMounted(async () => {
+  setOpenLoading(true);
+  token.value = auth.user?.currentToken ??
+    JSON.parse(localStorage.getItem("user") ?? '{"currentToken": "undefinied!"}')
+      ?.currentToken;
+
+  await checkToken()
+
+  //if (auth?.user || localStorage.getItem('user')) {
+  if (isLoggedIn.value) {
     console.log('Usuário autenticado, redirecionando...')
     router.push('/');
   } else {
     console.log('Login page...')
   }
+  setOpenLoading(false);
+  //console.log(localStorage.getItem('user'))
 })
 
 </script>

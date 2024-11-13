@@ -86,7 +86,7 @@ async function newStore() {
 }
 
 async function canCreateNewStore() {
-  await api.get('/stores/can-create-new-store')
+  await api.get('/api/stores/can-create-new-store')
     .then((r) => {
       createStore.value = r.data
     })
@@ -102,7 +102,7 @@ async function canCreateNewStore() {
 onMounted(() => {
   loading.status = true
 
-  api.get('/stores')
+  api.get('/api/stores')
     .then(r => {
       stores.value = r.data
     })

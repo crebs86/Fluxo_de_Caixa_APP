@@ -141,7 +141,7 @@ function crateSuppliers() {
     , length({ value: supplierModel.value.docs ? supplierModel.value.docs.match(/\d/g).join("") : '', min: 11, max: 14, field: 'CPF/CNPJ' })
   ) {
     loading.status = true;
-    api.post('/suppliers/store/' + store.value.id, supplierModel.value)
+    api.post('/api/suppliers/store/' + store.value.id, supplierModel.value)
       .then((r) => {
         goTo({ name: 'supplier-edit', params: { id: r.data.id } })
       })
@@ -165,7 +165,7 @@ function crateSuppliers() {
 
 onMounted(() => {
   loading.status = true;
-  api.get('suppliers/loadStore/' + route.params?.store)
+  api.get('/api/suppliers/loadStore/' + route.params?.store)
     .then((r) => {
       store.value = r.data[0]
       supplierModel.value.store_id = r.data[0]?.id
