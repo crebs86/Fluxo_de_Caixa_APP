@@ -14,7 +14,7 @@
 
 
             <ion-item color="ice">
-              <ion-select label="Loja:" label-placement="fixed" placeholder="selecionar" @ionChange="loadSuppliers()"
+              <ion-select label="Loja:" label-placement="fixed" placeholder="selecionar" @ionChange="loadSupplies()"
                 v-model="currentStore">
                 <ion-select-option :value="s.id" color="ice" v-for="(s, i) in stores" :key="'store' + i">
                   {{ s.name }}
@@ -24,14 +24,13 @@
 
             <div class="mt-4 ml-4">Fornecedores da Loja({{ supplies.length ?? 0 }})
               <ion-list>
-                <ion-item v-for="(s, i) in supplies" :key="'suppliers_' + i" color="ice"
-                  @click="goTo({ name: 'supplier-edit', params: { id: s.id } })">
+                <ion-item v-for="(s, i) in supplies" :key="'suplies_' + i" color="ice">
                   {{ s.id }}. {{ s.name }}
                 </ion-item>
               </ion-list>
             </div>
 
-            <ion-fab slot="fixed" vertical="bottom" horizontal="end" v-if="currentStore">
+            <ion-fab slot="fixed" vertical="bottom" horizontal="end">
               <ion-fab-button color="amber">
                 <ion-icon :icon="add"></ion-icon>
               </ion-fab-button>
@@ -84,10 +83,10 @@ const supplies = ref({});
 
 const loading = utils();
 
-function loadSuppliers() {
+function loadSupplies() {
   supplies.value = {}
-  loading.status = true
-  api.get('/api/suppliers/loadByStore/' + currentStore.value)
+  loading.setLoadStatus(true)
+  api.get('supplies/loadByStore/' + currentStore.value)
     .then((r) => {
       if (r.data?.length < 1) {
         message.value = 'Nenhum fornecedor cadastrado para esta loja.';
@@ -98,7 +97,7 @@ function loadSuppliers() {
       }
     })
     .catch((e) => {
-      if (e?.response?.status === 403) {
+      if (e?.response?.status === 419) {
         message.value = e?.response?.data
       } else {
         message.value = 'Ocorreu um erro ao processar sua solicitação.';
@@ -106,7 +105,7 @@ function loadSuppliers() {
       color.value = 'danger'
       setOpen(true)
     })
-    .finally(() => { loading.status = false })
+    .finally(loading.setLoadStatus(false))
 }
 
 function newSupplier() {
@@ -114,37 +113,25 @@ function newSupplier() {
     color.value = 'danger'
     setOpen(true)
     message.value = 'Selecione uma loja para criar o fornecedor.';
+    //message.value = 'Você atingiu o número máximo de fornecedores para conta gratuita.';
   } else {
-    loading.status = true
-    api('/api/suppliers/can-create-new-supplier/' + currentStore.value)
-      .then(() => {
-        goTo({ name: 'supplier-new', params: { store: currentStore.value } })
-      })
-      .catch((e) => {
-        message.value = e.response?.data
-        setOpen(true)
-      })
-      .finally(() => {
-        loading.status = false
-      })
+    //goTo('/tabs/stores/new')
+    console.log('ir para nreSupplies')
+
   }
 }
 
 onMounted(() => {
-  loading.status = true
-  api.get('/api/stores')
+  api.get('/stores')
     .then(r => {
       stores.value = r.data
     })
     .catch((e) => {
-      if (e.response.status === 403) {
-        message.value = e.response?.data?.message
+      if (e.response.status === 401) {
+        message.value = e.response.data.message
         setOpen(true)
       }
       color.value = 'danger'
-    })
-    .finally(() => {
-      loading.status = false
     })
 })
 

@@ -117,6 +117,7 @@ async function checkToken() {
 }
 
 onMounted(async () => {
+
   setOpenLoading(true);
   token.value = auth.user?.currentToken ??
     JSON.parse(localStorage.getItem("user") ?? '{"currentToken": "undefinied!"}')
@@ -124,7 +125,6 @@ onMounted(async () => {
 
   await checkToken()
 
-  //if (auth?.user || localStorage.getItem('user')) {
   if (isLoggedIn.value) {
     console.log('Usuário autenticado, redirecionando...')
     router.push('/');
@@ -132,7 +132,6 @@ onMounted(async () => {
     console.log('Login page...')
   }
   setOpenLoading(false);
-  //console.log(localStorage.getItem('user'))
 })
 
 </script>

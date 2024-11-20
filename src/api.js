@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useAuthStore } from "./store/useAuthStore";
+import { goTo } from "./modules/utils";
 
 const auth = useAuthStore();
 
@@ -21,7 +22,22 @@ const api = axios.create({
   },
 });
 
+api.interceptors.response.use(
+  function (config) {
+    return config;
+  },
+  function (error) {
+    if (
+      error?.response?.status === 401 &&
+      window.location.pathname !== "/tabs/login"
+    ) {
+      goTo({ name: "login" });
+    }
+    return Promise.reject(error);
+  }
+);
+
 api.defaults.withCredentials = true;
 api.defaults.withXSRFToken = true;
 
-export default api;
+export default api;0

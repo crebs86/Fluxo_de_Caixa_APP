@@ -137,8 +137,8 @@ function crateStore() {
           if (e?.response?.status === 422) {
             storeModel.value.errors = e?.response?.data.errors
             storeModel.value.error_message = 'Não foi possível concluir a ação. Verifique os erros abaixo.'
-          } else if (e?.response?.status === 401) {
-            storeModel.value.error_message = e?.response?.data.message
+          } else if (e?.response?.status === 403) {
+            storeModel.value.error_message = e?.response?.data
           } else {
             storeModel.value.error_message = 'Ocorreu um erro ao processar solicitação.'
           }

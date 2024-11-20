@@ -3,6 +3,7 @@ const phoneMask = (value) => {
   value = value.replace(/\D/g, "");
   value = value.replace(/(\d{2})(\d)/, "($1)$2");
   value = value.replace(/(\d)(\d{4})$/, "$1-$2");
+
   return value;
 };
 
@@ -24,4 +25,15 @@ const docsMask = (value) => {
   return value;
 };
 
-export { phoneMask, docsMask };
+const currencyMask = (value) => {
+  if (!value) return "";
+  value = value.replace(".", "").replace(",", "").replace(/\D/g, "");
+  let options = { minimumFractionDigits: 2 };
+  value = new Intl.NumberFormat("pt-BR", options).format(
+    parseFloat(value) / 100
+  );
+
+  return value;
+};
+
+export { phoneMask, docsMask, currencyMask };

@@ -34,6 +34,17 @@
               </ion-col>
             </ion-button>
 
+            <ion-button fill="clear" @click="goTo({ name: 'products' })">
+              <ion-col>
+                <ion-row style="display: block">
+                  <ion-icon :src="basket"></ion-icon>
+                </ion-row>
+                <ion-row class="ion-text-capitalize">
+                  <small>Produtos</small>
+                </ion-row>
+              </ion-col>
+            </ion-button>
+
             <ion-button fill="clear" @click="goTo({ name: 'suppliers' })">
               <ion-col>
                 <ion-row style="display: block">
@@ -97,6 +108,7 @@ import user_group from '../assets/icons/user-group.svg';
 import cart from '../assets/icons/cart-larger.svg';
 import money from '../assets/icons/money-bag.svg';
 import shop from '../assets/icons/shop.svg';
+import basket from '../assets/icons/basket.svg';
 import { goTo } from '../modules/utils';
 
 

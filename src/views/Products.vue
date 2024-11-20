@@ -2,11 +2,11 @@
   <ion-page>
     <Layout>
       <template #main>
-        <Header title="Fornecedores" />
+        <Header title="Produtos" />
         <ion-content :fullscreen="true" color="ice">
           <ion-header collapse="condense">
             <ion-toolbar color="yellow-light">
-              <ion-title size="large">Fornecedores</ion-title>
+              <ion-title size="large">Produtos</ion-title>
             </ion-toolbar>
           </ion-header>
 
@@ -14,7 +14,7 @@
 
 
             <ion-item color="ice">
-              <ion-select label="Loja:" label-placement="fixed" placeholder="selecionar" @ionChange="loadSuppliers()"
+              <ion-select label="Loja:" label-placement="fixed" placeholder="selecionar" @ionChange="loadProducts()"
                 v-model="currentStore">
                 <ion-select-option :value="s.id" color="ice" v-for="(s, i) in stores" :key="'store' + i">
                   {{ s.name }}
@@ -22,10 +22,10 @@
               </ion-select>
             </ion-item>
 
-            <div class="mt-4 ml-4">Fornecedores da Loja({{ supplies.length ?? 0 }})
+            <div class="mt-4 ml-4">Produtos da Loja({{ supplies.length ?? 0 }})
               <ion-list>
-                <ion-item v-for="(s, i) in supplies" :key="'suppliers_' + i" color="ice"
-                  @click="goTo({ name: 'supplier-edit', params: { id: s.id } })">
+                <ion-item v-for="(s, i) in supplies" :key="'product_' + i" color="ice"
+                  @click="goTo({ name: 'product-edit', params: { id: s.id } })">
                   {{ s.id }}. {{ s.name }}
                 </ion-item>
               </ion-list>
@@ -36,13 +36,13 @@
                 <ion-icon :icon="add"></ion-icon>
               </ion-fab-button>
               <ion-fab-list side="start">
-                <ion-button class="button-fab" color="yellow-light" @click="newSupplier">
+                <ion-button class="button-fab" color="yellow-light" @click="newProduct">
                   <ion-col>
                     <ion-row style="display: block">
                       <ion-icon :src="delivery" size="large"></ion-icon>
                     </ion-row>
                     <ion-row class="ion-text-capitalize">
-                      <small>Fornecedor</small>
+                      <small>Produto</small>
                     </ion-row>
                   </ion-col>
                 </ion-button>
@@ -84,13 +84,13 @@ const supplies = ref({});
 
 const loading = utils();
 
-function loadSuppliers() {
+function loadProducts() {
   supplies.value = {}
   loading.status = true
-  api.get('/api/suppliers/loadByStore/' + currentStore.value)
+  api.get('/api/products/loadByStore/' + currentStore.value)
     .then((r) => {
       if (r.data?.length < 1) {
-        message.value = 'Nenhum fornecedor cadastrado para esta loja.';
+        message.value = 'Nenhum produto cadastrado para esta loja.';
         color.value = 'warning'
         setOpen(true)
       } else {
@@ -98,7 +98,7 @@ function loadSuppliers() {
       }
     })
     .catch((e) => {
-      if (e?.response?.status === 403) {
+      if (e?.response?.status === 419) {
         message.value = e?.response?.data
       } else {
         message.value = 'Ocorreu um erro ao processar sua solicitação.';
@@ -109,16 +109,16 @@ function loadSuppliers() {
     .finally(() => { loading.status = false })
 }
 
-function newSupplier() {
+function newProduct() {
   if (!currentStore.value) {
     color.value = 'danger'
     setOpen(true)
-    message.value = 'Selecione uma loja para criar o fornecedor.';
+    message.value = 'Selecione uma loja para cadastrar um produto.';
   } else {
     loading.status = true
-    api('/api/suppliers/can-create-new-supplier/' + currentStore.value)
+    api('/api/products/can-create-new-product/' + currentStore.value)
       .then(() => {
-        goTo({ name: 'supplier-new', params: { store: currentStore.value } })
+        goTo({ name: 'product-new', params: { store: currentStore.value } })
       })
       .catch((e) => {
         message.value = e.response?.data

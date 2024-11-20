@@ -22,7 +22,7 @@
           <ion-icon aria-hidden="true" :icon="personSharp" />
           <ion-label>Conta</ion-label>
         </ion-tab-button>
-        <ion-tab-button tab="tab4" href="/tabs/dev" v-if="env === 'dev' || true">
+        <ion-tab-button tab="tab4" href="/tabs/dev" v-if="env === 'dev'">
           <ion-icon aria-hidden="true" :icon="settings" />
           <ion-label>DEV</ion-label>
         </ion-tab-button>

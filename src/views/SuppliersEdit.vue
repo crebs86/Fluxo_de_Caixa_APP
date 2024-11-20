@@ -2,78 +2,84 @@
   <ion-page>
     <Layout>
       <template #main>
-        <Header :title="canEdit ? 'Editando Loja' : 'Loja'" />
+        <Header :title="canEdit ? 'Editando Fornecedor' : 'Fornecedor'" />
         <ion-content :fullscreen="true" color="ice">
           <ion-header collapse="condense">
             <ion-toolbar color="yellow-light">
-              <ion-title size="large">{{ canEdit ? 'Editando Loja' : 'Loja' }}</ion-title>
+              <ion-title size="large">{{ canEdit ? 'Editando Fornecedor' : 'Fornecedor' }}</ion-title>
             </ion-toolbar>
           </ion-header>
 
           <div class="container">
 
             <ion-list class="list">
+              <ion-item color="gray-light">
+                <ion-input label="Loja" label-placement="floating" color="amber" v-model="supplierModel.store.name"
+                  readonly></ion-input>
+              </ion-item>
+
               <ion-item color="ice">
-                <ion-input label="Nome" label-placement="floating" color="amber" v-model="storeModel.name"
+                <ion-input label="Nome" label-placement="floating" color="amber" v-model="supplierModel.name"
                   :readonly="!canEdit"></ion-input>
               </ion-item>
 
               <ion-item color="ice">
                 <ion-input label="E-mail" type="email" label-placement="floating" color="amber"
-                  v-model="storeModel.email" :readonly="!canEdit"></ion-input>
+                  v-model="supplierModel.email" :readonly="!canEdit"></ion-input>
               </ion-item>
 
               <ion-item color="ice">
                 <ion-input label="Contato 1" type="tel" label-placement="floating" color="amber"
-                  v-model="storeModel.contact1" @keyup="maskPhone($event)" maxlength="14"
+                  v-model="supplierModel.contact1" @keyup="maskPhone($event)" maxlength="14"
                   :readonly="!canEdit"></ion-input>
               </ion-item>
               <ion-item color="ice">
                 <ion-input label="Contato 2" type="tel" label-placement="floating" color="amber"
-                  v-model="storeModel.contact2" @keyup="maskPhone($event)" maxlength="14"
+                  v-model="supplierModel.contact2" @keyup="maskPhone($event)" maxlength="14"
                   :readonly="!canEdit"></ion-input>
               </ion-item>
 
               <ion-item color="ice">
                 <ion-input label="Endereço" type="text" label-placement="floating" color="amber"
-                  v-model="storeModel.address" :readonly="!canEdit"></ion-input>
+                  v-model="supplierModel.address" :readonly="!canEdit"></ion-input>
               </ion-item>
 
               <ion-item color="ice">
                 <ion-input label="CPF/CNPJ" type="text" label-placement="floating" color="amber"
-                  v-model="storeModel.docs" @keyup="maskDocs($event)" maxlength="18" :readonly="!canEdit"></ion-input>
+                  v-model="supplierModel.docs" @keyup="maskDocs($event)" maxlength="18"
+                  :readonly="!canEdit"></ion-input>
               </ion-item>
 
               <ion-item color="ice">
-                <ion-text>Criado em: {{ date(storeModel.created_at).format('DD/MM/YYYY HH:mm:ss') }}</ion-text>
+                <ion-text>Criado em: {{ date(supplierModel.created_at).format('DD/MM/YYYY HH:mm:ss') }}</ion-text>
               </ion-item>
               <ion-item color="ice">
-                <ion-text>Atualizado em: {{ date(storeModel.updated_at).format('DD/MM/YYYY HH:mm:ss') }}</ion-text>
+                <ion-text>Atualizado em: {{ date(supplierModel.updated_at).format('DD/MM/YYYY HH:mm:ss') }}</ion-text>
               </ion-item>
 
             </ion-list>
 
             <template v-if="canEdit">
-              <ion-button expand="full" color="amber" @click="updateStore()">Salvar Loja</ion-button>
+              <ion-button expand="full" color="amber" @click="updateSupplier()">Salvar Fornecedor</ion-button>
               <ion-button expand="full" color="danger" @click="canEdit = false">Cancelar Edição</ion-button>
             </template>
 
-            <ion-text v-for="(e, i) in storeModel.errors?.name" :key="'er_name' + i">
+            <ion-text v-for="(e, i) in supplierModel.errors?.name" :key="'er_name' + i">
               <small class="small-text-danger">{{ e }}</small><br>
             </ion-text>
-            <ion-text v-for="(e, i) in storeModel.errors?.email" :key="'er_email' + i">
+            <ion-text v-for="(e, i) in supplierModel.errors?.email" :key="'er_email' + i">
               <small class="small-text-danger">{{ e }}</small><br>
             </ion-text>
-            <ion-text v-for="(e, i) in storeModel.errors?.contact1" :key="'er_contact1' + i">
+            <ion-text v-for="(e, i) in supplierModel.errors?.contact1" :key="'er_contact1' + i">
               <small class="small-text-danger">{{ e }}</small><br>
             </ion-text>
-            <ion-text v-for="(e, i) in storeModel.errors?.contact2" :key="'er_contact2' + i">
+            <ion-text v-for="(e, i) in supplierModel.errors?.contact2" :key="'er_contact2' + i">
               <small class="small-text-danger">{{ e }}</small><br>
             </ion-text>
-            <ion-text v-for="(e, i) in storeModel.errors?.address" :key="'er_address' + i">
+            <ion-text v-for="(e, i) in supplierModel.errors?.address" :key="'er_address' + i">
               <small class="small-text-danger">{{ e }}</small><br>
             </ion-text>
-            <ion-text v-for="(e, i) in storeModel.errors?.docs" :key="'er_docs' + i">
+            <ion-text v-for="(e, i) in supplierModel.errors?.docs" :key="'er_docs' + i">
               <small class="small-text-danger">{{ e }}</small><br>
             </ion-text>
 
@@ -84,7 +90,7 @@
             </ion-fab>
 
           </div>
-          <ion-toast :is-open="isOpen" :message="storeModel.error_message" :duration="3000" position="middle"
+          <ion-toast :is-open="isOpen" :message="supplierModel.error_message" :duration="3000" position="middle"
             color="danger" @didDismiss="setOpen(false)">
           </ion-toast>
 
@@ -109,7 +115,7 @@ import { utils } from '../store/utils';
 
 const loading = utils();
 
-const storeModel = ref({
+const supplierModel = ref({
   name: '',
   email: '',
   docs: '',
@@ -117,7 +123,8 @@ const storeModel = ref({
   contact2: '',
   address: '',
   error_message: '',
-  errors: {}
+  errors: {},
+  store: { name: '' }
 })
 
 const route = useRoute();
@@ -139,36 +146,36 @@ const maskDocs = (event) => {
   input.value = docsMask(input.value)
 }
 
-function updateStore() {
+function updateSupplier() {
 
   try {
-    storeModel.value.errors = {}
-    storeModel.value.error_message = ''
-    storeModel.value.docs = docsMask(storeModel.value.docs)
+    supplierModel.value.errors = {}
+    supplierModel.value.error_message = ''
+    supplierModel.value.docs = docsMask(supplierModel.value.docs)
     if (
-      length({ value: storeModel.value.name, min: 3, max: 255, field: 'Nome' })
-      , email(storeModel.value.email) && length({ value: storeModel.value.email, min: 5, max: 255, field: 'E-mail' })
-      , (length({ value: storeModel.value.contact1, min: 13, max: 14, field: 'Contato 1' }))
-      , (!storeModel.value.contact2 || length({ value: storeModel.value.contact2, min: 13, max: 14, field: 'Contato 2' }))
-      , (!storeModel.value.address || length({ value: storeModel.value.address, min: 5, max: 255, field: 'Endereço' }))
-      , length({ value: storeModel.value.docs ? storeModel.value.docs.match(/\d/g).join("") : '', min: 11, max: 14, field: 'CPF/CNPJ' })
+      length({ value: supplierModel.value.name, min: 3, max: 255, field: 'Nome' })
+      , email(supplierModel.value.email) && length({ value: supplierModel.value.email, min: 5, max: 255, field: 'E-mail' })
+      , (length({ value: supplierModel.value.contact1, min: 13, max: 14, field: 'Contato 1' }))
+      , (!supplierModel.value.contact2 || length({ value: supplierModel.value.contact2, min: 13, max: 14, field: 'Contato 2' }))
+      , (!supplierModel.value.address || length({ value: supplierModel.value.address, min: 5, max: 255, field: 'Endereço' }))
+      , length({ value: supplierModel.value.docs ? supplierModel.value.docs.match(/\d/g).join("") : '', min: 11, max: 14, field: 'CPF/CNPJ' })
     ) {
       loading.status = true
-      api.post('/api/stores/store/update/' + route.params?.id, storeModel.value)
+      api.post('/api/suppliers/supplier/update/' + route.params?.id, supplierModel.value)
         .then((r) => {
-          loadStore(r)
+          loadSupplier(r)
           canEdit.value = false
         })
         .catch((e) => {
           if (e?.response?.status === 422) {
-            storeModel.value.error_message = e.response?.data?.message
-            storeModel.value.errors = e?.response?.data.errors
+            supplierModel.value.error_message = e.response?.data?.message
+            supplierModel.value.errors = e?.response?.data.errors
             setOpen(true)
           } else if (e?.response?.status === 403) {
-            storeModel.value.error_message = e?.response?.data
+            supplierModel.value.error_message = e?.response?.data
             setOpen(true)
           } else {
-            storeModel.value.error_message = 'Não foi possível concluir a ação. Verifique os erros do formulário.'
+            supplierModel.value.error_message = 'Não foi possível concluir a ação. Verifique os erros do formulário.'
           }
         })
         .finally(() => {
@@ -176,32 +183,29 @@ function updateStore() {
         })
     }
   } catch (error) {
-    storeModel.value.error_message = error.message
     setOpen(true)
+    supplierModel.value.error_message = error.message
   }
 
 }
 
-function loadStore(r) {
-  storeModel.value = r.data
-  storeModel.value.error_message = ''
-  storeModel.value.errors = {}
-  storeModel.value.contact1 = storeModel.value.contact1 ? phoneMask(storeModel.value.contact1) : null
-  storeModel.value.contact2 = storeModel.value.contact2 ? phoneMask(storeModel.value.contact2) : null
-  storeModel.value.docs = docsMask(storeModel.value.docs)
+function loadSupplier(r) {
+  supplierModel.value = r.data
+  supplierModel.value.error_message = ''
+  supplierModel.value.errors = {}
+  supplierModel.value.contact1 = supplierModel.value.contact1 ? phoneMask(supplierModel.value.contact1) : null
+  supplierModel.value.contact2 = supplierModel.value.contact2 ? phoneMask(supplierModel.value.contact2) : null
+  supplierModel.value.docs = docsMask(supplierModel.value.docs)
 }
 
 onMounted(() => {
   loading.status = true
-  api.get('/api/stores/store/show/' + route.params?.id)
+  api.get('/api/suppliers/supplier/show/' + route.params?.id)
     .then((r) => {
-      loadStore(r)
+      loadSupplier(r)
     })
     .catch((e) => {
-      if (e?.response?.status === 403) {
-        storeModel.value.error_message = e?.response?.data
-        setOpen(true)
-      }
+      console.log(e?.response)
     })
     .finally(() => {
       loading.status = false

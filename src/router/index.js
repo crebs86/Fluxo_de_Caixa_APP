@@ -49,6 +49,7 @@ const routes = [
         component: () => import("@/views/Account.vue"),
         name: "account",
       },
+      /*stores routes*/
       {
         path: "dev",
         component: () => import("@/views/Dev.vue"),
@@ -73,7 +74,7 @@ const routes = [
         beforeEnter: [checkIfLogged],
         name: "stores-edit",
       },
-
+      /*suppliers routes*/
       {
         path: "suppliers",
         component: () => import("@/views/Suppliers.vue"),
@@ -88,9 +89,28 @@ const routes = [
       },
       {
         path: "suppliers/edit/:id",
-        component: () => import("@/views/StoresEdit.vue"),
+        component: () => import("@/views/SuppliersEdit.vue"),
         beforeEnter: [checkIfLogged],
         name: "supplier-edit",
+      },
+      /*products routes*/
+      {
+        path: "products",
+        component: () => import("@/views/Products.vue"),
+        beforeEnter: [checkIfLogged],
+        name: "products",
+      },
+      {
+        path: "products/new/:store",
+        component: () => import("@/views/ProductsNew.vue"),
+        beforeEnter: [checkIfLogged],
+        name: "product-new",
+      },
+      {
+        path: "products/edit/:id",
+        component: () => import("@/views/ProductsEdit.vue"),
+        beforeEnter: [checkIfLogged],
+        name: "product-edit",
       },
     ],
   },

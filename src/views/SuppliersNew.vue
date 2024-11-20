@@ -129,38 +129,41 @@ const maskDocs = (event) => {
 }
 
 function crateSuppliers() {
-
-  supplierModel.value.errors = {}
-  supplierModel.value.error_message = ''
-  if (
-    length({ value: supplierModel.value.name, min: 3, max: 255, field: 'Nome' })
-    , email(supplierModel.value.email) && length({ value: supplierModel.value.email, min: 5, max: 255, field: 'E-mail' })
-    , (length({ value: supplierModel.value.contact1, min: 13, max: 14, field: 'Contato 1' }))
-    , (!supplierModel.value.contact2 || length({ value: supplierModel.value.contact2, min: 13, max: 14, field: 'Contato 2' }))
-    , (!supplierModel.value.address || length({ value: supplierModel.value.address, min: 5, max: 255, field: 'Endereço' }))
-    , length({ value: supplierModel.value.docs ? supplierModel.value.docs.match(/\d/g).join("") : '', min: 11, max: 14, field: 'CPF/CNPJ' })
-  ) {
-    loading.status = true;
-    api.post('/api/suppliers/store/' + store.value.id, supplierModel.value)
-      .then((r) => {
-        goTo({ name: 'supplier-edit', params: { id: r.data.id } })
-      })
-      .catch((e) => {
-        if (e?.response?.status === 422) {
-          supplierModel.value.errors = e?.response?.data.errors
-          supplierModel.value.error_message = 'Não foi possível concluir a ação. Verifique os erros abaixo.'
-        } else if (e?.response?.status === 401) {
-          supplierModel.value.error_message = e?.response?.data.message
-        } else {
-          supplierModel.value.error_message = 'Ocorreu um erro ao processar solicitação.'
-        }
-        setOpen(true)
-      })
-      .finally(() => {
-        loading.status = false;
-      })
+  try {
+    supplierModel.value.errors = {}
+    supplierModel.value.error_message = ''
+    if (
+      length({ value: supplierModel.value.name, min: 3, max: 255, field: 'Nome' })
+      , email(supplierModel.value.email) && length({ value: supplierModel.value.email, min: 5, max: 255, field: 'E-mail' })
+      , (length({ value: supplierModel.value.contact1, min: 13, max: 14, field: 'Contato 1' }))
+      , (!supplierModel.value.contact2 || length({ value: supplierModel.value.contact2, min: 13, max: 14, field: 'Contato 2' }))
+      , (!supplierModel.value.address || length({ value: supplierModel.value.address, min: 5, max: 255, field: 'Endereço' }))
+      , length({ value: supplierModel.value.docs ? supplierModel.value.docs.match(/\d/g).join("") : '', min: 11, max: 14, field: 'CPF/CNPJ' })
+    ) {
+      loading.status = true;
+      api.post('/api/suppliers/store/' + store.value.id, supplierModel.value)
+        .then((r) => {
+          goTo({ name: 'supplier-edit', params: { id: r.data.id } })
+        })
+        .catch((e) => {
+          if (e?.response?.status === 422) {
+            supplierModel.value.errors = e?.response?.data?.errors
+            supplierModel.value.error_message = 'Não foi possível concluir a ação. Verifique os erros abaixo.'
+          } else if (e?.response?.status === 403) {
+            supplierModel.value.error_message = e?.response?.data
+          } else {
+            supplierModel.value.error_message = 'Ocorreu um erro ao processar solicitação.'
+          }
+          setOpen(true)
+        })
+        .finally(() => {
+          loading.status = false;
+        })
+    }
+  } catch (error) {
+    setOpen(true)
+    supplierModel.value.error_message = error.message
   }
-
 }
 
 onMounted(() => {
@@ -171,7 +174,7 @@ onMounted(() => {
       supplierModel.value.store_id = r.data[0]?.id
     })
     .catch((e) => {
-      if (e?.response?.status === 419 || e?.response?.status === 401) {
+      if (e?.response?.status === 403) {
         supplierModel.value.error_message = e?.response?.data?.message
       } else {
         supplierModel.value.error_message = 'Ocorreu um erro ao processar solicitação.'

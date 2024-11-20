@@ -75,7 +75,6 @@ const message = ref('');
 const loading = utils();
 
 async function newStore() {
-  console.log('canCreateStore', createStore.value)
   await canCreateNewStore()
   if (!createStore.value) {
     setOpen(true)
@@ -92,7 +91,7 @@ async function canCreateNewStore() {
     })
     .catch((e) => {
       createStore.value = false
-      message.value = e.response?.data?.message;
+      message.value = e.response?.data;
     })
     .finally(
       () => { }
@@ -107,10 +106,8 @@ onMounted(() => {
       stores.value = r.data
     })
     .catch((e) => {
-      //if (e.response.status === 401) {
       message.value = e.response?.data?.message
       setOpen(true)
-      //}
     })
     .finally(() => {
       loading.status = false
